@@ -2,11 +2,10 @@
 Converts OBJ files to OFF format. This tools only converts the geometry of OBJ file.
 
 # Requirements
- - CMake 
  - Boost library
 
 # Installation
-Build the tool using CMake
+Build the tool using Visual Studio (Windows) or make (Linux)
 
 # Usage
 ./obj2off sample.obj
