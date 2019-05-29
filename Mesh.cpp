@@ -25,15 +25,16 @@
 #include <fstream>
 #include <cassert>
 #include <cfloat>
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
+#include <sstream>
+//#include <boost/foreach.hpp>
+//#include <boost/tokenizer.hpp>
 #include "Mesh.h"
 #include "Clock.h"
 #include "util.h"
 
 
 using namespace std;
-using namespace boost;
+//using namespace boost;
 
 Mesh::Mesh(){
        vertices = NULL;
@@ -272,22 +273,37 @@ void Mesh::loadFromObjFile(const char* filename){
 		if(str.size()==0 || str[0]=='#')
 			continue;
 		
-		//Extraer los tokens y guardarlos en un vector
+		stringstream sAux(str);
+		string inter;
 		vector<string> tok;
-		char_separator<char> sep(" ");
-		tokenizer< char_separator<char> > tokens(str, sep);
-		BOOST_FOREACH (const string& t, tokens){
-			tok.push_back(t);
+
+		while(getline(sAux, inter, ' ')){
+			tok.push_back(inter);
 		}
+		
+		//Extraer los tokens y guardarlos en un vector
+		//vector<string> tok;
+		//char_separator<char> sep(" ");
+		//tokenizer< char_separator<char> > tokens(str, sep);
+		//BOOST_FOREACH (const string& t, tokens){
+		//	tok.push_back(t);
+		//}
 		
 		if(tok[tok.size()-1].find('\\')!=string::npos){
 			string str1;
 			lineNumber++;
 			getline(in, str1);
-			tokenizer< char_separator<char> > tokens3(str1, sep);
-			BOOST_FOREACH (const string& t, tokens3){
-				tok.push_back(t);
+
+			stringstream sAux1(str1);
+
+			while(getline(sAux1, inter, ' ')){
+				tok.push_back(inter);
 			}
+
+			//tokenizer< char_separator<char> > tokens3(str1, sep);
+			//BOOST_FOREACH (const string& t, tokens3){
+			//	tok.push_back(t);
+			//}
 		}
 		
 		if(tok[0].compare("v")==0){
@@ -309,11 +325,19 @@ void Mesh::loadFromObjFile(const char* filename){
 				exit(EXIT_FAILURE);
 			}
 			vector<int> indices;
-			char_separator<char> sep2("/");
+			//char_separator<char> sep2("/");
 			for(int i = 1; i < tok.size(); i++){
-				tokenizer< char_separator<char> > tokens2(tok[i], sep2);
-				tokenizer< char_separator<char> >::iterator beg = tokens2.begin();
-				int index = atoi(beg->c_str());
+				//tokenizer< char_separator<char> > tokens2(tok[i], sep2);
+				//tokenizer< char_separator<char> >::iterator beg = tokens2.begin();
+				stringstream aux3(tok[i]);
+				vector<string> vecAux;
+
+				while(getline(aux3, inter, '/')){
+					vecAux.push_back(inter);
+				}
+
+				//int index = atoi(beg->c_str());
+				int index = atoi(vecAux[0].c_str());
 				//cout << index << " ";
 				vector<int>::iterator it = find(indices.begin(), indices.end(), index);
 				if(it == indices.end())

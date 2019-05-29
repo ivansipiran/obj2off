@@ -20,6 +20,7 @@
 #ifndef __CLOCK_H_
 #define __CLOCK_H_
 #include <iostream>
+#include <ctime>
 using namespace std;
 
 //namespace Base{
